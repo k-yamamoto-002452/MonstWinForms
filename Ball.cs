@@ -9,16 +9,69 @@ namespace MonstWinForms
         public float Size;
         public Color Color;
         public ComboType ComboType;
+        public StrikeShotType StrikeShotType;
+        public string StrikeShotName;
+        public int StrikeShotNeedTurn;
+        public int StrikeShotTurn;
+        public bool StrikeShotActive;
+        public Image CharacterImage;
         private readonly float friction;
 
-        public Ball(float x, float y, float size, Color color, ComboType comboType)
+        public Ball(float x, float y, float size, Color color, ComboType comboType, StrikeShotType strikeShotType, string strikeShotName, int strikeShotNeedTurn, Image characterImage)
         {
             Position = new Vector2(x, y);
             Velocity = new Vector2(0f, 0f);
             Size = size;
             Color = color;
             ComboType = comboType;
+            StrikeShotType = strikeShotType;
+            StrikeShotName = strikeShotName;
+            StrikeShotNeedTurn = strikeShotNeedTurn;
+            StrikeShotTurn = 0;
+            StrikeShotActive = false;
+            CharacterImage = characterImage;
             friction = 0.985f;
+        }
+
+        public bool CanUseStrikeShot()
+        {
+            return StrikeShotTurn >= StrikeShotNeedTurn;
+        }
+
+        public int GetStrikeShotRemainTurn()
+        {
+            int remain = StrikeShotNeedTurn - StrikeShotTurn;
+
+            if (remain < 0)
+            {
+                return 0;
+            }
+
+            return remain;
+        }
+
+        public void AddStrikeShotTurn()
+        {
+            if (StrikeShotTurn < StrikeShotNeedTurn)
+            {
+                StrikeShotTurn++;
+            }
+        }
+
+        public void ActivateStrikeShot()
+        {
+            if (!CanUseStrikeShot())
+            {
+                return;
+            }
+
+            StrikeShotActive = true;
+        }
+
+        public void ResetStrikeShot()
+        {
+            StrikeShotTurn = 0;
+            StrikeShotActive = false;
         }
 
         public void Update(int width, int height)
@@ -65,15 +118,19 @@ namespace MonstWinForms
 
         public void Draw(Graphics g, bool active, int number)
         {
-            using (Brush brush = new SolidBrush(Color))
+            float x = Position.X - Size / 2f;
+            float y = Position.Y - Size / 2f;
+
+            if (CharacterImage != null)
             {
-                g.FillEllipse(
-                    brush,
-                    Position.X - Size / 2f,
-                    Position.Y - Size / 2f,
-                    Size,
-                    Size
-                );
+                ImageHelper.DrawCircleImage(g, CharacterImage, x, y, Size);
+            }
+            else
+            {
+                using (Brush brush = new SolidBrush(Color))
+                {
+                    g.FillEllipse(brush, x, y, Size, Size);
+                }
             }
 
             if (active)
@@ -86,6 +143,20 @@ namespace MonstWinForms
                         Position.Y - Size / 2f - 4f,
                         Size + 8f,
                         Size + 8f
+                    );
+                }
+            }
+
+            if (CanUseStrikeShot())
+            {
+                using (Pen pen = new Pen(Color.Gold, 4f))
+                {
+                    g.DrawEllipse(
+                        pen,
+                        Position.X - Size / 2f - 9f,
+                        Position.Y - Size / 2f - 9f,
+                        Size + 18f,
+                        Size + 18f
                     );
                 }
             }

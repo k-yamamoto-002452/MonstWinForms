@@ -66,9 +66,9 @@ namespace MonstWinForms
             gameClear = false;
 
             players.Clear();
-            players.Add(new Ball(ClientSize.Width / 2f - 90f, ClientSize.Height - 120f, 48f, Color.FromArgb(77, 166, 255), ComboType.Explosion));
-            players.Add(new Ball(ClientSize.Width / 2f, ClientSize.Height - 120f, 48f, Color.FromArgb(120, 255, 150), ComboType.CrossLaser));
-            players.Add(new Ball(ClientSize.Width / 2f + 90f, ClientSize.Height - 120f, 48f, Color.FromArgb(255, 210, 80), ComboType.Homing));
+            players.Add(new Ball(ClientSize.Width / 2f - 90f, ClientSize.Height - 120f, 48f, Color.FromArgb(77, 166, 255), ComboType.Explosion, StrikeShotType.SpeedUp, "スピードアップショット", 3, null));
+            players.Add(new Ball(ClientSize.Width / 2f, ClientSize.Height - 120f, 48f, Color.FromArgb(120, 255, 150), ComboType.CrossLaser, StrikeShotType.AllLaser, "全体レーザー", 4, null));
+            players.Add(new Ball(ClientSize.Width / 2f + 90f, ClientSize.Height - 120f, 48f, Color.FromArgb(255, 210, 80), ComboType.Homing, StrikeShotType.StrongHoming, "超ホーミング", 5, null));
 
             LoadStage();
             Invalidate();
@@ -95,6 +95,7 @@ namespace MonstWinForms
             {
                 players[i].Position = new Vector2(ClientSize.Width / 2f - 90f + i * 90f, y);
                 players[i].Velocity = new Vector2(0f, 0f);
+                players[i].StrikeShotActive = false;
             }
         }
 
@@ -108,6 +109,11 @@ namespace MonstWinForms
             if (e.KeyCode == Keys.R)
             {
                 Restart();
+            }
+
+            if (e.KeyCode == Keys.Space)
+            {
+                UseStrikeShot();
             }
         }
 
@@ -140,6 +146,12 @@ namespace MonstWinForms
             {
                 shotMoving = false;
                 comboUsed.Clear();
+
+                for (int i = 0; i < players.Count; i++)
+                {
+                    players[i].AddStrikeShotTurn();
+                }
+
                 currentPlayerIndex++;
 
                 if (currentPlayerIndex >= players.Count)
@@ -238,6 +250,13 @@ namespace MonstWinForms
             if (distance > 5f)
             {
                 float power = Math.Min(distance / 8f, 22f);
+
+                if (CurrentPlayer.StrikeShotActive && CurrentPlayer.StrikeShotType == StrikeShotType.SpeedUp)
+                {
+                    power *= 1.6f;
+                    CurrentPlayer.ResetStrikeShot();
+                }
+
                 Vector2 direction = pull.Normalize();
                 CurrentPlayer.Velocity = direction * power;
                 shotCount++;
@@ -387,6 +406,77 @@ namespace MonstWinForms
             DamageEnemy(targetIndex, 4);
         }
 
+        private void UseStrikeShot()
+        {
+            if (!AllPlayersStopped())
+            {
+                return;
+            }
+
+            if (gameClear)
+            {
+                return;
+            }
+
+            Ball player = CurrentPlayer;
+
+            if (!player.CanUseStrikeShot())
+            {
+                return;
+            }
+
+            if (player.StrikeShotType == StrikeShotType.SpeedUp)
+            {
+                player.ActivateStrikeShot();
+            }
+            else if (player.StrikeShotType == StrikeShotType.AllLaser)
+            {
+                AllLaserStrikeShot(player);
+                player.ResetStrikeShot();
+            }
+            else if (player.StrikeShotType == StrikeShotType.StrongHoming)
+            {
+                StrongHomingStrikeShot(player);
+                player.ResetStrikeShot();
+            }
+        }
+
+        private void AllLaserStrikeShot(Ball player)
+        {
+            effects.Add(new ComboEffect(player.Position, ComboType.CrossLaser));
+
+            for (int i = enemies.Count - 1; i >= 0; i--)
+            {
+                DamageEnemy(i, 5);
+            }
+        }
+
+        private void StrongHomingStrikeShot(Ball player)
+        {
+            int targetIndex = -1;
+            float nearest = float.MaxValue;
+
+            for (int i = 0; i < enemies.Count; i++)
+            {
+                float distance = (enemies[i].Position - player.Position).Length();
+
+                if (distance < nearest)
+                {
+                    nearest = distance;
+                    targetIndex = i;
+                }
+            }
+
+            if (targetIndex == -1)
+            {
+                return;
+            }
+
+            Vector2 target = enemies[targetIndex].Position;
+            effects.Add(new ComboEffect(player.Position, target, ComboType.Homing));
+            DamageEnemy(targetIndex, 10);
+        }
+
         private void DamageEnemy(int index, int damage)
         {
             if (index < 0 || index >= enemies.Count)
@@ -507,7 +597,10 @@ namespace MonstWinForms
                 g.DrawString("ショット数: " + shotCount, font, brush, 12f, 60f);
                 g.DrawString("現在の味方: " + (currentPlayerIndex + 1), font, brush, 12f, 84f);
                 g.DrawString("友情: " + GetComboName(CurrentPlayer.ComboType), font, brush, 12f, 108f);
-                g.DrawString("Rキーでリスタート", font, brush, 12f, 132f);
+                g.DrawString("必殺技: " + CurrentPlayer.StrikeShotName, font, brush, 12f, 132f);
+                g.DrawString("SS: " + GetStrikeShotText(CurrentPlayer), font, brush, 12f, 156f);
+                g.DrawString("SpaceキーでSS発動", font, brush, 12f, 180f);
+                g.DrawString("Rキーでリスタート", font, brush, 12f, 204f);
 
                 if (gameClear)
                 {
@@ -544,6 +637,21 @@ namespace MonstWinForms
             }
 
             return "";
+        }
+
+        private string GetStrikeShotText(Ball player)
+        {
+            if (player.StrikeShotActive)
+            {
+                return "発動中";
+            }
+
+            if (player.CanUseStrikeShot())
+            {
+                return "READY";
+            }
+
+            return "あと" + player.GetStrikeShotRemainTurn() + "ターン";
         }
     }
 }
