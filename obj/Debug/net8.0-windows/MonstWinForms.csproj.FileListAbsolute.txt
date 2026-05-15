@@ -15,3 +15,6 @@ Z:\実習\git\MonstWinForms\obj\Debug\net8.0-windows\ref\MonstWinForms.dll
 Z:\実習\git\MonstWinForms\obj\Debug\net8.0-windows\MonstWinForms.sourcelink.json
 Z:\実習\git\MonstWinForms\obj\Debug\net8.0-windows\MonstWinForms.GameForm.resources
 Z:\実習\git\MonstWinForms\obj\Debug\net8.0-windows\MonstWinForms.csproj.GenerateResource.cache
+Z:\実習\git\MonstWinForms\bin\Debug\net8.0-windows\Images\player1.png
+Z:\実習\git\MonstWinForms\bin\Debug\net8.0-windows\Images\player2.png
+Z:\実習\git\MonstWinForms\bin\Debug\net8.0-windows\Images\player3.png

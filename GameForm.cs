@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.IO;
 using System.Windows.Forms;
 
 namespace MonstWinForms
@@ -66,12 +67,24 @@ namespace MonstWinForms
             gameClear = false;
 
             players.Clear();
-            players.Add(new Ball(ClientSize.Width / 2f - 90f, ClientSize.Height - 120f, 48f, Color.FromArgb(77, 166, 255), ComboType.Explosion, StrikeShotType.SpeedUp, "スピードアップショット", 3, null));
-            players.Add(new Ball(ClientSize.Width / 2f, ClientSize.Height - 120f, 48f, Color.FromArgb(120, 255, 150), ComboType.CrossLaser, StrikeShotType.AllLaser, "全体レーザー", 4, null));
-            players.Add(new Ball(ClientSize.Width / 2f + 90f, ClientSize.Height - 120f, 48f, Color.FromArgb(255, 210, 80), ComboType.Homing, StrikeShotType.StrongHoming, "超ホーミング", 5, null));
+            players.Add(new Ball(ClientSize.Width / 2f - 90f, ClientSize.Height - 120f, 64f, Color.FromArgb(77, 166, 255), ComboType.Explosion, StrikeShotType.SpeedUp, "スピードアップショット", 3, LoadCharacterImage("player1.png")));
+            players.Add(new Ball(ClientSize.Width / 2f, ClientSize.Height - 120f, 64f, Color.FromArgb(120, 255, 150), ComboType.CrossLaser, StrikeShotType.AllLaser, "全体レーザー", 4, LoadCharacterImage("player2.png")));
+            players.Add(new Ball(ClientSize.Width / 2f + 90f, ClientSize.Height - 120f, 64f, Color.FromArgb(255, 210, 80), ComboType.Homing, StrikeShotType.StrongHoming, "超ホーミング", 5, LoadCharacterImage("player3.png")));
 
             LoadStage();
             Invalidate();
+        }
+
+        private Image LoadCharacterImage(string fileName)
+        {
+            string path = Path.Combine(Application.StartupPath, "Images", fileName);
+
+            if (!File.Exists(path))
+            {
+                return null;
+            }
+
+            return Image.FromFile(path);
         }
 
         private void LoadStage()
