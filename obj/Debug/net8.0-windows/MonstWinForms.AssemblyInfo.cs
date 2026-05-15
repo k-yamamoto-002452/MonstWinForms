@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("MonstWinForms")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+9b583b1351aa4f6585220307dc5c051151969fc8")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+a544223ac40d8450c2be3c3d4aaf50871386ce6c")]
 [assembly: System.Reflection.AssemblyProductAttribute("MonstWinForms")]
 [assembly: System.Reflection.AssemblyTitleAttribute("MonstWinForms")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
