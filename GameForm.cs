@@ -12,6 +12,7 @@ namespace MonstWinForms
         private readonly List<Enemy> enemies;
         private readonly List<ComboEffect> effects;
         private readonly HashSet<int> comboUsed;
+        private readonly List<Wall> walls;
         private Vector2 dragStart;
         private Vector2 dragCurrent;
         private bool dragging;
@@ -33,6 +34,7 @@ namespace MonstWinForms
             enemies = new List<Enemy>();
             effects = new List<ComboEffect>();
             comboUsed = new HashSet<int>();
+            walls = new List<Wall>();
 
             gameTimer = new System.Windows.Forms.Timer();
             gameTimer.Interval = 16;
@@ -79,13 +81,31 @@ namespace MonstWinForms
             enemies.Clear();
             effects.Clear();
             comboUsed.Clear();
+            walls.Clear();
             dragging = false;
             shotMoving = false;
 
             ResetPlayers();
 
             enemies.AddRange(StageManager.CreateStage(stage));
+
+            if (stage == 1)
+            {
+                walls.Add(new Wall(350f, 250f, 300f, 30f));
+            }
+            else if (stage == 2)
+            {
+                walls.Add(new Wall(150f, 220f, 250f, 30f));
+                walls.Add(new Wall(600f, 420f, 250f, 30f));
+            }
+            else if (stage == 3)
+            {
+                walls.Add(new Wall(220f, 180f, 560f, 30f));
+                walls.Add(new Wall(220f, 500f, 560f, 30f));
+                
+            }
         }
+        
 
         private void ResetPlayers()
         {
@@ -120,6 +140,8 @@ namespace MonstWinForms
                     players[i].Update(ClientSize.Width, ClientSize.Height);
                 }
 
+                UpdateEnemies(); // ここで敵の更新を呼び出す
+
                 Collision();
                 UpdateEffects();
                 CheckTurn();
@@ -127,6 +149,14 @@ namespace MonstWinForms
             }
 
             Invalidate();
+        }
+
+        private void UpdateEnemies()
+        {
+            for (int i = 0; i < enemies.Count; i++)
+            {
+                enemies[i].Update();
+            }
         }
 
         private void CheckTurn()
@@ -254,6 +284,42 @@ namespace MonstWinForms
             {
                 Ball ball = players[p];
 
+                for (int w = 0; w < walls.Count; w++)
+                {
+                    Wall wall = walls[w];
+
+                    RectangleF ballRect = new RectangleF(
+                        ball.Position.X - ball.Size / 2f,
+                        ball.Position.Y - ball.Size / 2f,
+                        ball.Size,
+                        ball.Size
+                    );
+
+                    if (wall.Rect.IntersectsWith(ballRect))
+                    {
+                        float left = Math.Abs(ball.Position.X - wall.Rect.Left);
+                        float right = Math.Abs(ball.Position.X - wall.Rect.Right);
+                        float top = Math.Abs(ball.Position.Y - wall.Rect.Top);
+                        float bottom = Math.Abs(ball.Position.Y - wall.Rect.Bottom);
+
+                        float min = Math.Min(
+                            Math.Min(left, right),
+                            Math.Min(top, bottom)
+                        );
+
+                        if (min == left || min == right)
+                        {
+                            ball.Velocity.X *= -1f;
+                        }
+                        else
+                        {
+                            ball.Velocity.Y *= -1f;
+                        }
+
+                        ball.Velocity *= 0.95f;
+                    }
+                }
+
                 for (int i = enemies.Count - 1; i >= 0; i--)
                 {
                     Enemy enemy = enemies[i];
@@ -304,13 +370,7 @@ namespace MonstWinForms
                     }
                 }
             }
-
-            for (int i = 0; i < enemies.Count; i++)
-            {
-                enemies[i].Update();
-            }
         }
-
         private void FriendCombo(Ball friend)
         {
             if (friend.ComboType == ComboType.Explosion)
@@ -437,6 +497,11 @@ namespace MonstWinForms
             Graphics g = e.Graphics;
             g.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.AntiAlias;
             g.Clear(Color.FromArgb(30, 30, 30));
+
+            for (int i = 0; i < walls.Count; i++)
+            {
+                walls[i].Draw(g);
+            }
 
             for (int i = 0; i < enemies.Count; i++)
             {

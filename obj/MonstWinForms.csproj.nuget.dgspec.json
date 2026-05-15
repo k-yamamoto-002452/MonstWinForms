@@ -10,11 +10,11 @@
         "projectUniqueName": "Z:\\実習\\git\\MonstWinForms\\MonstWinForms.csproj",
         "projectName": "MonstWinForms",
         "projectPath": "Z:\\実習\\git\\MonstWinForms\\MonstWinForms.csproj",
-        "packagesPath": "C:\\Users\\ko_yamamoto\\.nuget\\packages\\",
+        "packagesPath": "C:\\Users\\k_onoue\\.nuget\\packages\\",
         "outputPath": "Z:\\実習\\git\\MonstWinForms\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "C:\\Users\\ko_yamamoto\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\k_onoue\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
