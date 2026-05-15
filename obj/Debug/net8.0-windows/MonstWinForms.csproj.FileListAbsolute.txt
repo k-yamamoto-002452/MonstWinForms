@@ -1,0 +1,14 @@
+Z:\実習\git\MonstWinForms\obj\Debug\net8.0-windows\MonstWinForms.GeneratedMSBuildEditorConfig.editorconfig
+Z:\実習\git\MonstWinForms\obj\Debug\net8.0-windows\MonstWinForms.AssemblyInfoInputs.cache
+Z:\実習\git\MonstWinForms\obj\Debug\net8.0-windows\MonstWinForms.AssemblyInfo.cs
+Z:\実習\git\MonstWinForms\obj\Debug\net8.0-windows\MonstWinForms.csproj.CoreCompileInputs.cache
+Z:\実習\git\MonstWinForms\bin\Debug\net8.0-windows\MonstWinForms.exe
+Z:\実習\git\MonstWinForms\bin\Debug\net8.0-windows\MonstWinForms.deps.json
+Z:\実習\git\MonstWinForms\bin\Debug\net8.0-windows\MonstWinForms.runtimeconfig.json
+Z:\実習\git\MonstWinForms\bin\Debug\net8.0-windows\MonstWinForms.dll
+Z:\実習\git\MonstWinForms\bin\Debug\net8.0-windows\MonstWinForms.pdb
+Z:\実習\git\MonstWinForms\obj\Debug\net8.0-windows\MonstWinForms.dll
+Z:\実習\git\MonstWinForms\obj\Debug\net8.0-windows\refint\MonstWinForms.dll
+Z:\実習\git\MonstWinForms\obj\Debug\net8.0-windows\MonstWinForms.pdb
+Z:\実習\git\MonstWinForms\obj\Debug\net8.0-windows\MonstWinForms.genruntimeconfig.cache
+Z:\実習\git\MonstWinForms\obj\Debug\net8.0-windows\ref\MonstWinForms.dll
