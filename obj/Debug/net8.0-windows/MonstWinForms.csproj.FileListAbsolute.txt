@@ -12,3 +12,6 @@ Z:\実習\git\MonstWinForms\obj\Debug\net8.0-windows\refint\MonstWinForms.dll
 Z:\実習\git\MonstWinForms\obj\Debug\net8.0-windows\MonstWinForms.pdb
 Z:\実習\git\MonstWinForms\obj\Debug\net8.0-windows\MonstWinForms.genruntimeconfig.cache
 Z:\実習\git\MonstWinForms\obj\Debug\net8.0-windows\ref\MonstWinForms.dll
+Z:\実習\git\MonstWinForms\obj\Debug\net8.0-windows\MonstWinForms.sourcelink.json
+Z:\実習\git\MonstWinForms\obj\Debug\net8.0-windows\MonstWinForms.GameForm.resources
+Z:\実習\git\MonstWinForms\obj\Debug\net8.0-windows\MonstWinForms.csproj.GenerateResource.cache
